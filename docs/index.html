@@ -259,6 +259,151 @@
     </section>
 
     <section class="section">
+      <h2>4) Reusable Template File: templates/cliq-notify.yml</h2>
+      <p>
+        This is the shared file your project includes. It is stored in the GitLab notifier repository and
+        reused by all consuming projects via <code>include:</code>.
+      </p>
+      <pre><code>include:
+  - project: 'your-group/gitlab-cliq-notifier'
+    ref: main
+    file: 'templates/cliq-notify.yml'</code></pre>
+      <p>
+        Put this in your project root <code>.gitlab-ci.yml</code> so the template is loaded into your pipeline.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>5) Source Code for the Shared Pipeline Template</h2>
+      <pre><code># Reusable GitLab CI template for Zoho Cliq notifications.
+# Java source is fetched at runtime from GitHub-Informer-New (single source of truth).
+#
+# ── HOW TO USE IN A CONSUMING REPO ────────────────────────────────────────────
+#
+#   .gitlab-ci.yml (in your project repo):
+#
+#     include:
+#       - project: 'your-group/gitlab-cliq-notifier'
+#         ref: main
+#         file: 'templates/cliq-notify.yml'
+#
+#   Then set these CI/CD Variables in Settings → CI/CD → Variables:
+#
+#   Required:
+#     ENDPOINT               Cliq channel URL + ?zapikey=&lt;token&gt;
+#
+#   Optional:
+#     CLIQ_NOTIFICATION_MODE  user (default) or bot
+#     CLIQ_BOT_UNIQUE_NAME    Required when mode is bot
+#     CUSTOM_MESSAGE          Custom message text, or _+_ for auto-generated
+#     AI_REVIEW_TOKEN         API token/key for the chosen AI_REVIEW_SERVICE — OpenAI key,
+#                               Gemini API key, or Anthropic key (required if AI_REVIEW_ENABLED=true)
+#     AI_REVIEW_ENABLED       true to enable AI MR review gate
+#     AI_REVIEW_SERVICE       REQUIRED if AI_REVIEW_ENABLED=true. No default — must be filled in.
+#     AI_REVIEW_MODEL         REQUIRED if AI_REVIEW_ENABLED=true. No default — must be filled in.
+#     AI_REVIEW_API_URL       REQUIRED if AI_REVIEW_ENABLED=true. No default — must be filled in.
+#     GITLAB_TOKEN            Project/Personal Access Token with 'api' scope (for MR comments)
+#
+# ──────────────────────────────────────────────────────────────────────────────
+
+stages:
+  - notify
+
+cliq-notify:
+  stage: notify
+  image: eclipse-temurin:19-jdk
+
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+
+  variables:
+    CUSTOM_MESSAGE: "_+_"
+    CLIQ_NOTIFICATION_MODE: "user"
+    CLIQ_BOT_UNIQUE_NAME: ""
+    CLIQ_BOT_DISPLAY_NAME: "GitLab Informer for Zoho Cliq"
+    CLIQ_BOT_IMAGE_URL: "https://workdrive.zohoexternal.com/external/a55ce4b1d1b64d36de31b77b6067d0a74b47b8733459390605c849bc880b05e8/download?directDownload=true"
+    CLIQ_INFORMER_REF: "main"
+    CLIQ_JAVA_SOURCE_REPO: "cliq-gitlab-informer/gitlab-cliq-java-source"
+
+    AI_REVIEW_ENABLED: "true"
+    AI_REVIEW_SERVICE: "gemini"
+    AI_REVIEW_MODEL: "gemini-2.0-flash"
+    AI_REVIEW_API_URL: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq git
+    - git clone --depth 1 --branch "$CLIQ_INFORMER_REF"
+        https://gitlab.com/${CLIQ_JAVA_SOURCE_REPO}.git /tmp/cliq-informer
+    - mkdir -p /tmp/cliq-informer/out
+    - javac /tmp/cliq-informer/src/GitLab_Cliq_Informer.java -d /tmp/cliq-informer/out
+
+    - |
+      if [[ "$(echo "${AI_REVIEW_ENABLED:-false}" | tr '[:upper:]' '[:lower:]')" == "true" ]]; then
+        missing=()
+        [[ -z "$AI_REVIEW_TOKEN" ]]     && missing+=("AI_REVIEW_TOKEN")
+        [[ -z "$AI_REVIEW_SERVICE" ]]   && missing+=("AI_REVIEW_SERVICE")
+        [[ -z "$AI_REVIEW_MODEL" ]]     && missing+=("AI_REVIEW_MODEL")
+        [[ -z "$AI_REVIEW_API_URL" ]]   && missing+=("AI_REVIEW_API_URL")
+        if [[ ${#missing[@]} -gt 0 ]]; then
+          echo "ERROR: AI_REVIEW_ENABLED=true but the following required CI/CD variables are not set:"
+          for m in "${missing[@]}"; do echo "  - $m"; done
+          exit 1
+        fi
+
+        service_lc=$(echo "$AI_REVIEW_SERVICE" | tr '[:upper:]' '[:lower:]' | xargs)
+        case "$service_lc" in
+          openai|gemini|claude|anthropic)
+            ;;
+          *)
+            echo "ERROR: AI_REVIEW_SERVICE=\"$AI_REVIEW_SERVICE\" is not a supported value."
+            exit 1
+            ;;
+        esac
+      fi
+
+    - |
+      if [[ -z "$ENDPOINT" ]]; then
+        echo "ERROR: ENDPOINT CI/CD variable is not set."
+        exit 1
+      fi
+
+      mode=$(echo "${CLIQ_NOTIFICATION_MODE:-user}" | tr '[:upper:]' '[:lower:]')
+      if [[ "$mode" == "bot" ]]; then
+        if [[ -z "$CLIQ_BOT_UNIQUE_NAME" ]]; then
+          echo "ERROR: CLIQ_BOT_UNIQUE_NAME is required when CLIQ_NOTIFICATION_MODE=bot."
+          exit 1
+        fi
+
+        if [[ "$ENDPOINT" == *"?"* ]]; then
+          export RESOLVED_ENDPOINT="$ENDPOINT&bot_unique_name=$CLIQ_BOT_UNIQUE_NAME"
+        else
+          export RESOLVED_ENDPOINT="$ENDPOINT?bot_unique_name=$CLIQ_BOT_UNIQUE_NAME"
+        fi
+      else
+        export RESOLVED_ENDPOINT="$ENDPOINT"
+      fi
+
+  script:
+    - java -cp /tmp/cliq-informer/out GitLab_Cliq_Informer "$RESOLVED_ENDPOINT"</code></pre>
+    </section>
+
+    <section class="section">
+      <h2>6) Validation Checklist</h2>
+      <ul>
+        <li>Pipeline runs without variable errors</li>
+        <li>Cliq message appears in target channel</li>
+        <li>Bot mode works (if configured)</li>
+        <li>AI MR review comment appears (if enabled)</li>
+      </ul>
+    </section>
+
+    <p class="footer">
+      Support note: Keep this file as a customer handout. It is standalone and can be shared directly.
+    </p>
+
+    <section class="section">
       <h2>4) Events That Trigger Notifications</h2>
       <ul>
         <li>Push to default branch</li>
