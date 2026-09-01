@@ -1,301 +1,511 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GitLab Cliq Notifier - Customer Setup Guide</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zoho Cliq GitHub Informer Usage Summary</title>
   <style>
     :root {
-      --bg: #f4f7fb;
-      --card: #ffffff;
-      --ink: #16213a;
-      --muted: #4a5a77;
-      --accent: #0a7ea4;
-      --accent-soft: #e3f4f9;
-      --ok: #156f3d;
-      --warn: #7c4d00;
-      --border: #d9e2ee;
+      --bg: #f4f7f2;
+      --panel: #ffffff;
+      --ink: #163126;
+      --muted: #5d7367;
+      --line: #d8e3db;
+      --accent: #1f8f5f;
+      --accent-2: #dff5ea;
+      --code: #0f241c;
     }
-
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: "Segoe UI", "Trebuchet MS", Tahoma, sans-serif;
+      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(180deg, #eef6f0 0%, var(--bg) 100%);
       color: var(--ink);
-      background:
-        radial-gradient(circle at 10% 10%, #d9f2ff 0%, transparent 35%),
-        radial-gradient(circle at 90% 0%, #fff3d3 0%, transparent 30%),
-        var(--bg);
       line-height: 1.55;
     }
-
     .wrap {
-      max-width: 980px;
+      max-width: 1080px;
       margin: 0 auto;
-      padding: 28px 18px 54px;
+      padding: 32px 20px 56px;
     }
-
     .hero {
-      background: linear-gradient(135deg, #0a7ea4 0%, #0c5f9f 55%, #18438e 100%);
+      background: linear-gradient(135deg, #173a2c 0%, #206a49 100%);
       color: #fff;
-      border-radius: 18px;
-      padding: 28px 24px;
-      box-shadow: 0 14px 34px rgba(10, 80, 130, 0.24);
-      animation: rise 0.55s ease-out both;
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 18px 40px rgba(20, 45, 33, 0.18);
     }
-
-    .hero h1 {
-      margin: 0 0 8px;
-      font-size: clamp(1.5rem, 2.6vw, 2.3rem);
-      letter-spacing: 0.2px;
-    }
-
+    .hero h1 { margin: 0 0 8px; font-size: 2rem; }
     .hero p {
-      margin: 0;
-      max-width: 800px;
-      opacity: 0.96;
+      margin: 8px 0 0;
+      max-width: 820px;
+      color: rgba(255,255,255,0.88);
     }
-
     .grid {
       display: grid;
-      gap: 14px;
-      margin-top: 16px;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      animation: rise 0.65s ease-out both;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+      margin-top: 22px;
     }
-
-    .badge {
-      background: rgba(255, 255, 255, 0.18);
-      border: 1px solid rgba(255, 255, 255, 0.32);
-      border-radius: 12px;
-      padding: 10px 12px;
-      font-size: 0.95rem;
+    .card, .section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 10px 24px rgba(21, 49, 36, 0.06);
     }
-
-    .section {
-      margin-top: 18px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 18px;
-      box-shadow: 0 8px 18px rgba(22, 33, 58, 0.05);
-      animation: rise 0.75s ease-out both;
+    .card { padding: 20px; }
+    .eyebrow {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
     }
-
-    h2 {
-      margin: 0 0 10px;
-      font-size: 1.18rem;
-      color: #113369;
-    }
-
-    ul {
-      margin: 8px 0 0 18px;
-      padding: 0;
-    }
-
-    li {
-      margin: 4px 0;
-    }
-
-    pre {
-      background: #0c1b2f;
-      color: #e7f0ff;
-      border-radius: 12px;
-      padding: 14px;
-      overflow-x: auto;
-      margin: 10px 0 0;
-      border: 1px solid #16355f;
-    }
-
+    h2 { margin: 0 0 12px; font-size: 1.35rem; }
+    h3 { margin: 0 0 10px; font-size: 1.05rem; }
+    .section { margin-top: 20px; padding: 22px; }
+    ul, ol { margin: 10px 0 0 20px; padding: 0; }
+    li + li { margin-top: 6px; }
     code {
-      font-family: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-family: "SFMono-Regular", Menlo, Consolas, monospace;
+      background: #eef5f0;
+      color: var(--code);
+      padding: 0.15rem 0.35rem;
+      border-radius: 6px;
+      font-size: 0.94em;
+    }
+    pre {
+      margin: 12px 0 0;
+      padding: 14px;
+      background: #10231b;
+      color: #ebfff4;
+      border-radius: 14px;
+      overflow: auto;
       font-size: 0.92rem;
     }
-
-    .table-wrap {
-      overflow-x: auto;
-    }
-
+    pre code { background: transparent; color: inherit; padding: 0; }
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 10px;
+      margin-top: 12px;
       font-size: 0.95rem;
     }
-
     th, td {
-      border: 1px solid var(--border);
-      padding: 10px;
       text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
       vertical-align: top;
     }
-
     th {
-      background: var(--accent-soft);
-      color: #0f375a;
+      color: var(--muted);
+      font-weight: 700;
+      background: #f8fbf9;
     }
-
-    .ok {
-      color: var(--ok);
-      font-weight: 600;
+    .pill {
+      display: inline-block;
+      margin: 4px 8px 0 0;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: var(--accent-2);
+      color: var(--accent);
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-decoration: none;
     }
-
-    .warn {
-      color: var(--warn);
-      font-weight: 600;
+    .note {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-left: 4px solid var(--accent);
+      background: #f4fbf7;
+      border-radius: 10px;
+      color: var(--muted);
     }
-
     .footer {
-      margin-top: 16px;
+      margin-top: 24px;
       color: var(--muted);
       font-size: 0.92rem;
     }
-
-    @keyframes rise {
-      from {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    a { color: #136c47; }
+    .repo-link {
+      display: inline-block;
+      margin-top: 10px;
+      font-weight: 700;
+      text-decoration: none;
     }
   </style>
 </head>
 <body>
   <div class="wrap">
     <section class="hero">
-      <h1>GitLab Cliq Notifier - Customer Setup Guide</h1>
-      <p>
-        This guide helps your team enable Zoho Cliq notifications from GitLab pipelines
-        in under 10 minutes.
-      </p>
-      <div class="grid">
-        <div class="badge">Reusable include template</div>
-        <div class="badge">Supports user and bot mode</div>
-        <div class="badge">Optional AI merge request review</div>
+      <h1>Zoho Cliq GitHub Informer</h1>
+      <p>This document summarizes how the two repositories work together: one repository provides the reusable GitHub Action implementation, and the other provides the ready-to-use workflow template that consuming repositories can copy and configure.</p>
+      <div style="margin-top:16px;">
+        <a class="pill" href="https://github.com/Lincy-Zoho/GitHub-Informer-New" target="_blank" rel="noreferrer">Action Repo: GitHub-Informer-New</a>
+        <a class="pill" href="https://github.com/Lincy-Zoho/TemplateRepositoryNew" target="_blank" rel="noreferrer">Template Repo: TemplateRepositoryNew</a>
+        <span class="pill">Features: Cliq notifications + Project thread reuse + AI review gate</span>
+      </div>
+    </section>
+
+    <div class="grid">
+      <article class="card">
+        <div class="eyebrow">Repository 1</div>
+        <h2>GitHub-Informer-New</h2>
+        <p>This is the reusable <strong>public GitHub Action</strong>. It contains the Java implementation that:</p>
+        <ul>
+          <li>posts GitHub event notifications to Zoho Cliq,</li>
+          <li>supports <strong>user mode</strong> and <strong>bot mode</strong>,</li>
+          <li>stores and reuses <strong>Cliq thread IDs</strong> in GitHub Project V2,</li>
+          <li>runs the <strong>AI Review Gate</strong> and publishes a check run.</li>
+        </ul>
+        <a class="repo-link" href="https://github.com/Lincy-Zoho/GitHub-Informer-New" target="_blank" rel="noreferrer">Open GitHub-Informer-New repository</a>
+      </article>
+
+      <article class="card">
+        <div class="eyebrow">Repository 2</div>
+        <h2>TemplateRepositoryNew</h2>
+        <p>This is the <strong>workflow template repo</strong>. It contains the ready-made <code>.github/workflows/CliqConnector.yml</code> file that consuming repositories can use directly.</p>
+        <ul>
+          <li>wires secrets and variables into the action,</li>
+          <li>handles PR project pre-insert logic,</li>
+          <li>configures AI review inputs,</li>
+          <li>builds the final Cliq endpoint for user or bot mode.</li>
+        </ul>
+        <a class="repo-link" href="https://github.com/Lincy-Zoho/TemplateRepositoryNew" target="_blank" rel="noreferrer">Open TemplateRepositoryNew repository</a>
+      </article>
+    </div>
+
+    <section class="section">
+      <div class="eyebrow">Repository Details</div>
+      <h2>Direct Repository References</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Repository</th>
+            <th>GitHub Link</th>
+            <th>Main Responsibility</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>TemplateRepositoryNew</strong></td>
+            <td><a href="https://github.com/Lincy-Zoho/TemplateRepositoryNew" target="_blank" rel="noreferrer">github.com/Lincy-Zoho/TemplateRepositoryNew</a></td>
+            <td>Provides the reusable <code>CliqConnector.yml</code> workflow template and setup documentation for consuming repositories.</td>
+          </tr>
+          <tr>
+            <td><strong>GitHub-Informer-New</strong></td>
+            <td><a href="https://github.com/Lincy-Zoho/GitHub-Informer-New" target="_blank" rel="noreferrer">github.com/Lincy-Zoho/GitHub-Informer-New</a></td>
+            <td>Provides the public GitHub Action implementation that posts to Cliq, stores thread IDs in Project V2, and runs AI Review Gate.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <div class="eyebrow">Recommended Model</div>
+      <h2>How Both Repositories Are Used</h2>
+      <ol>
+        <li>Publish and version the action from <strong>GitHub-Informer-New</strong> using a tag such as <code>v3</code>.</li>
+        <li>Keep the workflow template in <strong>TemplateRepositoryNew</strong>.</li>
+        <li>In a consuming repository, copy <code>CliqConnector.yml</code> or use it as the reference workflow.</li>
+        <li>Configure repository <strong>Secrets</strong> and <strong>Variables</strong>.</li>
+        <li>The workflow calls <code>Lincy-Zoho/GitHub-Informer-New@v3</code>.</li>
+      </ol>
+      <div class="note">
+        Best practice: users should not copy action source files locally. They only need the workflow file in their repo, while the action logic stays in the public action repo.
       </div>
     </section>
 
     <section class="section">
-      <h2>1) Add Include to Your Repository</h2>
-      <p>Add this in your repository root <code>.gitlab-ci.yml</code>:</p>
-      <pre><code>include:
+      <div class="eyebrow">Setup</div>
+      <h2>Required Secrets and Variables</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>ENDPOINT</code></td>
+            <td>Secret</td>
+            <td>Cliq channel endpoint with <code>?zapikey=...</code></td>
+          </tr>
+          <tr>
+            <td><code>PROJECT_TOKEN</code></td>
+            <td>Secret</td>
+            <td>Classic GitHub PAT for Project V2 operations. Required scopes: <code>repo</code>, <code>project</code>, and optionally <code>read:org</code> for org-owned projects.</td>
+          </tr>
+          <tr>
+            <td><code>AI_REVIEW_TOKEN</code></td>
+            <td>Secret</td>
+            <td>Token for OpenAI, Claude, or Gemini if AI review is enabled.</td>
+          </tr>
+          <tr>
+            <td><code>CLIQ_NOTIFICATION_MODE</code></td>
+            <td>Variable or YAML value</td>
+            <td><code>user</code> or <code>bot</code></td>
+          </tr>
+          <tr>
+            <td><code>CLIQ_BOT_UNIQUE_NAME</code></td>
+            <td>Variable or YAML value</td>
+            <td>Required only for bot mode.</td>
+          </tr>
+          <tr>
+            <td><code>CLIQ_PROJECT_NUMBER</code></td>
+            <td>Variable</td>
+            <td>GitHub Project V2 number.</td>
+          </tr>
+          <tr>
+            <td><code>CLIQ_THREAD_FIELD_ID</code></td>
+            <td>Variable</td>
+            <td>Project field identifier or GraphQL field node id used to store the Cliq thread id.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <div class="eyebrow">Notification Modes</div>
+      <h2>User Mode vs Bot Mode</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Mode</th>
+            <th>What User Sets</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>User mode</strong></td>
+            <td><code>CLIQ_NOTIFICATION_MODE=user</code></td>
+            <td>Uses the existing <code>ENDPOINT</code> secret as-is. No bot unique name is required.</td>
+          </tr>
+          <tr>
+            <td><strong>Bot mode</strong></td>
+            <td><code>CLIQ_NOTIFICATION_MODE=bot</code><br><code>CLIQ_BOT_UNIQUE_NAME=&lt;bot-name&gt;</code></td>
+            <td>The workflow reuses <code>ENDPOINT</code> and appends <code>bot_unique_name</code> automatically.</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3 style="margin-top:16px;">Two Supported Ways to Provide Mode Values</h3>
+      <ol>
+        <li><strong>GitHub Variables</strong> in repository settings.</li>
+        <li><strong>Direct values in <code>CliqConnector.yml</code></strong>.</li>
+      </ol>
+      <pre><code>env:
+  CLIQ_NOTIFICATION_MODE: ${{ vars.CLIQ_NOTIFICATION_MODE || 'user' }}
+  CLIQ_BOT_UNIQUE_NAME: ${{ vars.CLIQ_BOT_UNIQUE_NAME || '' }}</code></pre>
+      <div class="note">
+        Recommended approach: use GitHub Variables for <code>CLIQ_NOTIFICATION_MODE</code> and <code>CLIQ_BOT_UNIQUE_NAME</code>, because users can change them without editing the workflow file.
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="eyebrow">Bot Setup</div>
+      <h2>How to Configure Bot Mode in Zoho Cliq</h2>
+      <ol>
+        <li>Create the bot in Zoho Cliq.</li>
+        <li>Open <strong>Integrations</strong> -> <strong>Bots</strong>.</li>
+        <li>Select the bot you created.</li>
+        <li>In the bot details panel, check the <strong>API Endpoint</strong>.</li>
+        <li>The value after <code>/bots/</code> is the <strong>bot unique name</strong>.</li>
+        <li>Add the bot to the target Cliq channel.</li>
+      </ol>
+      <pre><code>Example API endpoint:
+https://cliq.zoho.com/api/v2/bots/githubnotification/message
+
+Bot unique name:
+githubnotification</code></pre>
+    </section>
+
+    <section class="section">
+      <div class="eyebrow">Project Reuse</div>
+      <h2>How Cliq Thread Reuse Works</h2>
+      <ol>
+        <li>The action resolves the PR item in GitHub Project V2.</li>
+        <li>It reads the existing value from the configured custom field.</li>
+        <li>If no thread id exists, it posts a new Cliq message.</li>
+        <li>It extracts the returned <code>message_id</code>.</li>
+        <li>It saves that id in the Project V2 custom field.</li>
+        <li>Later PR events reuse the same thread.</li>
+      </ol>
+    </section>
+
+    <section class="section">
+      <div class="eyebrow">AI Review</div>
+      <h2>AI Review Gate Flow</h2>
+      <ol>
+        <li>The workflow runs AI review on <code>pull_request_target</code>.</li>
+        <li>The action fetches PR diff, sends it to the configured AI provider, and parses the result.</li>
+        <li>It creates a GitHub check run using <code>ai-review-check-name</code>.</li>
+        <li>If the AI result is <strong>PASS</strong>, merge can proceed.</li>
+        <li>If the AI result is <strong>FAIL</strong>, the PR gets a comment and the Cliq PR thread receives the failure report.</li>
+      </ol>
+      <h3 style="margin-top:16px;">Required Status Check Setup</h3>
+      <ol>
+        <li>Set the workflow input <code>ai-review-check-name</code> to the desired check name.</li>
+        <li>Run the workflow once on a PR.</li>
+        <li>In GitHub Rules or Branch Protection, enable <strong>Require status checks to pass</strong>.</li>
+        <li>Add the exact same check name as a required check.</li>
+      </ol>
+      <div class="note">
+        Exact name matching matters. If the required check name and the workflow check name differ, GitHub shows <strong>Waiting for status to be reported</strong>.
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="eyebrow">Workflow Shape</div>
+      <h2>High-Level Execution Flow</h2>
+      <ol>
+        <li>Resolve mode and prepare Cliq endpoint.</li>
+        <li>Validate Project V2 token.</li>
+        <li>Ensure the PR exists in the GitHub Project.</li>
+        <li>Post the notification to Cliq.</li>
+        <li>Save or reuse the PR thread id.</li>
+        <li>Run AI Review Gate and publish the status check.</li>
+      </ol>
+    </section>
+
+    <section class="section">
+      <div class="eyebrow">Reusable Template</div>
+      <h2>Project Template File</h2>
+      <p>The reusable CI template lives in <code>templates/cliq-notify.yml</code> and is included from a consuming repo using the standard GitLab include pattern.</p>
+      <pre><code># .gitlab-ci.yml (in the consuming repository)
+include:
   - project: 'your-group/gitlab-cliq-notifier'
     ref: main
     file: 'templates/cliq-notify.yml'</code></pre>
-      <p class="warn">Replace <code>your-group/gitlab-cliq-notifier</code> with your actual GitLab path.</p>
-    </section>
 
-    <section class="section">
-      <h2>2) Configure CI/CD Variables</h2>
-      <p class="ok">Important: these settings are already defined in the shared template YAML under <code>variables:</code>.</p>
-      <p>You can keep template defaults, or override any value per repository using GitLab CI/CD Variables.</p>
-      <p><strong>Minimum required variables for current defaults:</strong> <code>AI_REVIEW_TOKEN</code>, <code>ENDPOINT</code>, <code>GITLAB_TOKEN</code>.</p>
-      <p>Go to <strong>Settings &gt; CI/CD &gt; Variables</strong> and add:</p>
+      <pre><code># templates/cliq-notify.yml
+# Reusable GitLab CI template for Zoho Cliq notifications.
+# Java source is fetched at runtime from GitHub-Informer-New (single source of truth).
+#
+# ── HOW TO USE IN A CONSUMING REPO ────────────────────────────────────────────
+#
+#   .gitlab-ci.yml (in your project repo):
+#
+#     include:
+#       - project: 'your-group/gitlab-cliq-notifier'
+#         ref: main
+#         file: 'templates/cliq-notify.yml'
+#
+#   Then set these CI/CD Variables in Settings → CI/CD → Variables:
+#
+#   Required:
+#     ENDPOINT               Cliq channel URL + ?zapikey=&lt;token&gt;
+#
+#   Optional:
+#     CLIQ_NOTIFICATION_MODE  user (default) or bot
+#     CLIQ_BOT_UNIQUE_NAME    Required when mode is bot
+#     CUSTOM_MESSAGE          Custom message text, or _+_ for auto-generated
+#     AI_REVIEW_TOKEN         API token/key for the chosen AI_REVIEW_SERVICE — OpenAI key,
+#                               Gemini API key, or Anthropic key (required if AI_REVIEW_ENABLED=true)
+#     AI_REVIEW_ENABLED       true to enable AI MR review gate
+#     AI_REVIEW_SERVICE       REQUIRED if AI_REVIEW_ENABLED=true. No default — must be filled in.
+#     AI_REVIEW_MODEL         REQUIRED if AI_REVIEW_ENABLED=true. No default — must be filled in.
+#     AI_REVIEW_API_URL       REQUIRED if AI_REVIEW_ENABLED=true. No default — must be filled in.
+#     GITLAB_TOKEN            Project/Personal Access Token with 'api' scope (for MR comments)
+#
+stages:
+  - notify
 
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Variable</th>
-              <th>Required</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>ENDPOINT</code></td>
-              <td class="ok">Yes</td>
-              <td>Zoho Cliq channel webhook URL including <code>?zapikey=&lt;token&gt;</code>.</td>
-            </tr>
-            <tr>
-              <td><code>CUSTOM_MESSAGE</code></td>
-              <td>No</td>
-              <td>Custom message template. Leave as <code>_+_</code> to use default auto message.</td>
-            </tr>
-            <tr>
-              <td><code>CLIQ_NOTIFICATION_MODE</code></td>
-              <td>No</td>
-              <td><code>user</code> (default) or <code>bot</code>.</td>
-            </tr>
-            <tr>
-              <td><code>CLIQ_BOT_UNIQUE_NAME</code></td>
-              <td>Only if bot mode</td>
-              <td>Mandatory when <code>CLIQ_NOTIFICATION_MODE=bot</code>.</td>
-            </tr>
-            <tr>
-              <td><code>CLIQ_BOT_DISPLAY_NAME</code></td>
-              <td>No</td>
-              <td>Display name shown in Cliq for bot posts.</td>
-            </tr>
-            <tr>
-              <td><code>CLIQ_BOT_IMAGE_URL</code></td>
-              <td>No</td>
-              <td>Avatar URL shown in Cliq for bot posts.</td>
-            </tr>
-          </tbody>
-        </table>
+cliq-notify:
+  stage: notify
+  image: eclipse-temurin:19-jdk
+
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+
+  variables:
+    CUSTOM_MESSAGE: "_+_"
+    CLIQ_NOTIFICATION_MODE: "user"
+    CLIQ_BOT_UNIQUE_NAME: ""
+    CLIQ_BOT_DISPLAY_NAME: "GitLab Informer for Zoho Cliq"
+    CLIQ_BOT_IMAGE_URL: "https://workdrive.zohoexternal.com/external/a55ce4b1d1b64d36de31b77b6067d0a74b47b8733459390605c849bc880b05e8/download?directDownload=true"
+    CLIQ_INFORMER_REF: "main"
+    CLIQ_JAVA_SOURCE_REPO: "cliq-gitlab-informer/gitlab-cliq-java-source"
+    AI_REVIEW_ENABLED: "true"
+    AI_REVIEW_SERVICE: "gemini"
+    AI_REVIEW_MODEL: "gemini-2.0-flash"
+    AI_REVIEW_API_URL: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq git
+    - git clone --depth 1 --branch "$CLIQ_INFORMER_REF"
+        https://gitlab.com/${CLIQ_JAVA_SOURCE_REPO}.git /tmp/cliq-informer
+    - mkdir -p /tmp/cliq-informer/out
+    - javac /tmp/cliq-informer/src/GitLab_Cliq_Informer.java -d /tmp/cliq-informer/out
+
+    - |
+      if [[ "$(echo "${AI_REVIEW_ENABLED:-false}" | tr '[:upper:]' '[:lower:]')" == "true" ]]; then
+        missing=()
+        [[ -z "$AI_REVIEW_TOKEN" ]]     && missing+=("AI_REVIEW_TOKEN")
+        [[ -z "$AI_REVIEW_SERVICE" ]]   && missing+=("AI_REVIEW_SERVICE")
+        [[ -z "$AI_REVIEW_MODEL" ]]     && missing+=("AI_REVIEW_MODEL")
+        [[ -z "$AI_REVIEW_API_URL" ]]   && missing+=("AI_REVIEW_API_URL")
+        if [[ ${#missing[@]} -gt 0 ]]; then
+          echo "ERROR: AI_REVIEW_ENABLED=true but the following required CI/CD variables are not set:"
+          for m in "${missing[@]}"; do echo "  - $m"; done
+          exit 1
+        fi
+
+        service_lc=$(echo "$AI_REVIEW_SERVICE" | tr '[:upper:]' '[:lower:]' | xargs)
+        case "$service_lc" in
+          openai|gemini|claude|anthropic)
+            ;;
+          *)
+            echo "ERROR: AI_REVIEW_SERVICE=\"$AI_REVIEW_SERVICE\" is not a supported value."
+            exit 1
+            ;;
+        esac
+      fi
+
+    - |
+      if [[ -z "$ENDPOINT" ]]; then
+        echo "ERROR: ENDPOINT CI/CD variable is not set."
+        exit 1
+      fi
+      mode=$(echo "${CLIQ_NOTIFICATION_MODE:-user}" | tr '[:upper:]' '[:lower:]')
+      if [[ "$mode" == "bot" ]]; then
+        if [[ -z "$CLIQ_BOT_UNIQUE_NAME" ]]; then
+          echo "ERROR: CLIQ_BOT_UNIQUE_NAME is required when CLIQ_NOTIFICATION_MODE=bot."
+          exit 1
+        fi
+        if [[ "$ENDPOINT" == *"?"* ]]; then
+          export RESOLVED_ENDPOINT="$ENDPOINT&bot_unique_name=$CLIQ_BOT_UNIQUE_NAME"
+        else
+          export RESOLVED_ENDPOINT="$ENDPOINT?bot_unique_name=$CLIQ_BOT_UNIQUE_NAME"
+        fi
+      else
+        export RESOLVED_ENDPOINT="$ENDPOINT"
+      fi
+
+  script:
+    - java -cp /tmp/cliq-informer/out GitLab_Cliq_Informer "$RESOLVED_ENDPOINT"</code></pre>
+
+      <div class="note">
+        This pattern keeps the reusable logic in one template file, while each consuming project only needs to include it and define the required CI/CD variables such as <code>ENDPOINT</code> and <code>AI_REVIEW_TOKEN</code>.
       </div>
     </section>
 
     <section class="section">
-      <h2>3) Optional: Enable AI MR Review</h2>
-      <p>If you want automated merge request review comments, set:</p>
+      <div class="eyebrow">Public Repo Usage</div>
+      <h2>Recommended Public Sharing Pattern</h2>
       <ul>
-        <li><code>AI_REVIEW_ENABLED=true</code></li>
-        <li><code>AI_REVIEW_TOKEN</code> (provider token or API key)</li>
-        <li><code>AI_REVIEW_SERVICE</code> = <code>openai</code>, <code>gemini</code>, or <code>claude</code> (alias: <code>anthropic</code>)</li>
-        <li><code>AI_REVIEW_MODEL</code> (exact model name)</li>
-        <li><code>AI_REVIEW_API_URL</code> (provider endpoint URL)</li>
-        <li><code>GITLAB_TOKEN</code> (with <code>api</code> scope for MR comments)</li>
-      </ul>
-      <p class="warn">If any required AI variable is missing, the pipeline fails fast with a clear message.</p>
-      <p class="ok">Template defaults already include <code>AI_REVIEW_SERVICE</code>, <code>AI_REVIEW_MODEL</code>, and <code>AI_REVIEW_API_URL</code>. Update in YAML or override in CI/CD variables.</p>
-    </section>
-
-    <section class="section">
-      <h2>4) Events That Trigger Notifications</h2>
-      <ul>
-        <li>Push to default branch</li>
-        <li>Merge request event</li>
-        <li>Scheduled pipeline</li>
-      </ul>
-      <p>If needed, your team can override the included job rules in your own <code>.gitlab-ci.yml</code>.</p>
-    </section>
-
-    <section class="section">
-      <h2>5) Custom Message Placeholders</h2>
-      <p>Use these placeholders in <code>CUSTOM_MESSAGE</code>:</p>
-      <ul>
-        <li><code>(me)</code> - linked GitLab username</li>
-        <li><code>(repo)</code> - linked project name</li>
-        <li><code>(event)</code> - event label</li>
-        <li><code>(ref)</code> - branch or tag link</li>
-        <li><code>(pull)</code> - merge request title link</li>
-        <li><code>(sha)</code> - short commit SHA</li>
-      </ul>
-      <pre><code>Example:
-(me) pushed to (ref) in (repo) [commit: (sha)]</code></pre>
-    </section>
-
-    <section class="section">
-      <h2>6) Validation Checklist</h2>
-      <ul>
-        <li>Pipeline runs without variable errors</li>
-        <li>Cliq message appears in target channel</li>
-        <li>Bot mode works (if configured)</li>
-        <li>AI MR review comment appears (if enabled)</li>
+        <li><strong>GitHub-Informer-New</strong> stays public as the reusable action repo.</li>
+        <li><strong>TemplateRepositoryNew</strong> stays public as the reference workflow repo.</li>
+        <li>Consuming repositories keep only their workflow file and private secrets/variables.</li>
       </ul>
     </section>
 
-    <p class="footer">
-      Support note: Keep this file as a customer handout. It is standalone and can be shared directly.
-    </p>
+    <p class="footer">Prepared from the current local state of the repositories <strong>TemplateRepositoryNew</strong> and <strong>GitHub-Informer-New</strong> on 2026-08-12.</p>
   </div>
 </body>
 </html>
