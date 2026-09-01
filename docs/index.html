@@ -194,20 +194,9 @@
     <section class="section">
       <h2>2) Reusable Template File: templates/cliq-notify.yml</h2>
       <p>
-        This is the shared file your project includes. It is stored in the GitLab notifier repository and
-        reused by all consuming projects via <code>include:</code>.
+        This is the actual shared YAML file stored in the GitLab notifier repository. It is the file your
+        consuming project includes through <code>include:</code>.
       </p>
-      <pre><code>include:
-  - project: 'your-group/gitlab-cliq-notifier'
-    ref: main
-    file: 'templates/cliq-notify.yml'</code></pre>
-      <p>
-        Put this in your project root <code>.gitlab-ci.yml</code> so the template is loaded into your pipeline.
-      </p>
-    </section>
-
-    <section class="section">
-      <h2>3) Source Code for the Shared Pipeline Template</h2>
       <pre><code># Reusable GitLab CI template for Zoho Cliq notifications.
 # Java source is fetched at runtime from GitHub-Informer-New (single source of truth).
 #
@@ -323,6 +312,15 @@ cliq-notify:
     </section>
 
     <section class="section">
+      <h2>3) How this file is added in a project</h2>
+      <p>In the consuming repository, add this include block to the root <code>.gitlab-ci.yml</code>:</p>
+      <pre><code>include:
+  - project: 'your-group/gitlab-cliq-notifier'
+    ref: main
+    file: 'templates/cliq-notify.yml'</code></pre>
+    </section>
+
+    <section class="section">
       <h2>4) Configure CI/CD Variables</h2>
       <p class="ok">Important: these settings are already defined in the shared template YAML under <code>variables:</code>.</p>
       <p>You can keep template defaults, or override any value per repository using GitLab CI/CD Variables.</p>
@@ -399,48 +397,6 @@ cliq-notify:
       </ul>
     </section>
 
-    <p class="footer">
-      Support note: Keep this file as a customer handout. It is standalone and can be shared directly.
-    </p>
-
-    <section class="section">
-      <h2>4) Events That Trigger Notifications</h2>
-      <ul>
-        <li>Push to default branch</li>
-        <li>Merge request event</li>
-        <li>Scheduled pipeline</li>
-      </ul>
-      <p>If needed, your team can override the included job rules in your own <code>.gitlab-ci.yml</code>.</p>
-    </section>
-
-    <section class="section">
-      <h2>5) Custom Message Placeholders</h2>
-      <p>Use these placeholders in <code>CUSTOM_MESSAGE</code>:</p>
-      <ul>
-        <li><code>(me)</code> - linked GitLab username</li>
-        <li><code>(repo)</code> - linked project name</li>
-        <li><code>(event)</code> - event label</li>
-        <li><code>(ref)</code> - branch or tag link</li>
-        <li><code>(pull)</code> - merge request title link</li>
-        <li><code>(sha)</code> - short commit SHA</li>
-      </ul>
-      <pre><code>Example:
-(me) pushed to (ref) in (repo) [commit: (sha)]</code></pre>
-    </section>
-
-    <section class="section">
-      <h2>6) Validation Checklist</h2>
-      <ul>
-        <li>Pipeline runs without variable errors</li>
-        <li>Cliq message appears in target channel</li>
-        <li>Bot mode works (if configured)</li>
-        <li>AI MR review comment appears (if enabled)</li>
-      </ul>
-    </section>
-
-    <p class="footer">
-      Support note: Keep this file as a customer handout. It is standalone and can be shared directly.
-    </p>
   </div>
 </body>
 </html>
