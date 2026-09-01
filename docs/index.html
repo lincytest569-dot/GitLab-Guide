@@ -192,74 +192,7 @@
     </section>
 
     <section class="section">
-      <h2>2) Configure CI/CD Variables</h2>
-      <p class="ok">Important: these settings are already defined in the shared template YAML under <code>variables:</code>.</p>
-      <p>You can keep template defaults, or override any value per repository using GitLab CI/CD Variables.</p>
-      <p><strong>Minimum required variables for current defaults:</strong> <code>AI_REVIEW_TOKEN</code>, <code>ENDPOINT</code>, <code>GITLAB_TOKEN</code>.</p>
-      <p>Go to <strong>Settings &gt; CI/CD &gt; Variables</strong> and add:</p>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Variable</th>
-              <th>Required</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>ENDPOINT</code></td>
-              <td class="ok">Yes</td>
-              <td>Zoho Cliq channel webhook URL including <code>?zapikey=&lt;token&gt;</code>.</td>
-            </tr>
-            <tr>
-              <td><code>CUSTOM_MESSAGE</code></td>
-              <td>No</td>
-              <td>Custom message template. Leave as <code>_+_</code> to use default auto message.</td>
-            </tr>
-            <tr>
-              <td><code>CLIQ_NOTIFICATION_MODE</code></td>
-              <td>No</td>
-              <td><code>user</code> (default) or <code>bot</code>.</td>
-            </tr>
-            <tr>
-              <td><code>CLIQ_BOT_UNIQUE_NAME</code></td>
-              <td>Only if bot mode</td>
-              <td>Mandatory when <code>CLIQ_NOTIFICATION_MODE=bot</code>.</td>
-            </tr>
-            <tr>
-              <td><code>CLIQ_BOT_DISPLAY_NAME</code></td>
-              <td>No</td>
-              <td>Display name shown in Cliq for bot posts.</td>
-            </tr>
-            <tr>
-              <td><code>CLIQ_BOT_IMAGE_URL</code></td>
-              <td>No</td>
-              <td>Avatar URL shown in Cliq for bot posts.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="section">
-      <h2>3) Optional: Enable AI MR Review</h2>
-      <p>If you want automated merge request review comments, set:</p>
-      <ul>
-        <li><code>AI_REVIEW_ENABLED=true</code></li>
-        <li><code>AI_REVIEW_TOKEN</code> (provider token or API key)</li>
-        <li><code>AI_REVIEW_SERVICE</code> = <code>openai</code>, <code>gemini</code>, or <code>claude</code> (alias: <code>anthropic</code>)</li>
-        <li><code>AI_REVIEW_MODEL</code> (exact model name)</li>
-        <li><code>AI_REVIEW_API_URL</code> (provider endpoint URL)</li>
-        <li><code>GITLAB_TOKEN</code> (with <code>api</code> scope for MR comments)</li>
-      </ul>
-      <p class="warn">If any required AI variable is missing, the pipeline fails fast with a clear message.</p>
-      <p class="ok">Template defaults already include <code>AI_REVIEW_SERVICE</code>, <code>AI_REVIEW_MODEL</code>, and <code>AI_REVIEW_API_URL</code>. Update in YAML or override in CI/CD variables.</p>
-    </section>
-
-    <section class="section">
-      <h2>4) Reusable Template File: templates/cliq-notify.yml</h2>
+      <h2>2) Reusable Template File: templates/cliq-notify.yml</h2>
       <p>
         This is the shared file your project includes. It is stored in the GitLab notifier repository and
         reused by all consuming projects via <code>include:</code>.
@@ -274,7 +207,7 @@
     </section>
 
     <section class="section">
-      <h2>5) Source Code for the Shared Pipeline Template</h2>
+      <h2>3) Source Code for the Shared Pipeline Template</h2>
       <pre><code># Reusable GitLab CI template for Zoho Cliq notifications.
 # Java source is fetched at runtime from GitHub-Informer-New (single source of truth).
 #
@@ -387,6 +320,73 @@ cliq-notify:
 
   script:
     - java -cp /tmp/cliq-informer/out GitLab_Cliq_Informer "$RESOLVED_ENDPOINT"</code></pre>
+    </section>
+
+    <section class="section">
+      <h2>4) Configure CI/CD Variables</h2>
+      <p class="ok">Important: these settings are already defined in the shared template YAML under <code>variables:</code>.</p>
+      <p>You can keep template defaults, or override any value per repository using GitLab CI/CD Variables.</p>
+      <p><strong>Minimum required variables for current defaults:</strong> <code>AI_REVIEW_TOKEN</code>, <code>ENDPOINT</code>, <code>GITLAB_TOKEN</code>.</p>
+      <p>Go to <strong>Settings &gt; CI/CD &gt; Variables</strong> and add:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Variable</th>
+              <th>Required</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>ENDPOINT</code></td>
+              <td class="ok">Yes</td>
+              <td>Zoho Cliq channel webhook URL including <code>?zapikey=&lt;token&gt;</code>.</td>
+            </tr>
+            <tr>
+              <td><code>CUSTOM_MESSAGE</code></td>
+              <td>No</td>
+              <td>Custom message template. Leave as <code>_+_</code> to use default auto message.</td>
+            </tr>
+            <tr>
+              <td><code>CLIQ_NOTIFICATION_MODE</code></td>
+              <td>No</td>
+              <td><code>user</code> (default) or <code>bot</code>.</td>
+            </tr>
+            <tr>
+              <td><code>CLIQ_BOT_UNIQUE_NAME</code></td>
+              <td>Only if bot mode</td>
+              <td>Mandatory when <code>CLIQ_NOTIFICATION_MODE=bot</code>.</td>
+            </tr>
+            <tr>
+              <td><code>CLIQ_BOT_DISPLAY_NAME</code></td>
+              <td>No</td>
+              <td>Display name shown in Cliq for bot posts.</td>
+            </tr>
+            <tr>
+              <td><code>CLIQ_BOT_IMAGE_URL</code></td>
+              <td>No</td>
+              <td>Avatar URL shown in Cliq for bot posts.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>5) Optional: Enable AI MR Review</h2>
+      <p>If you want automated merge request review comments, set:</p>
+      <ul>
+        <li><code>AI_REVIEW_ENABLED=true</code></li>
+        <li><code>AI_REVIEW_TOKEN</code> (provider token or API key)</li>
+        <li><code>AI_REVIEW_SERVICE</code> = <code>openai</code>, <code>gemini</code>, or <code>claude</code> (alias: <code>anthropic</code>)</li>
+        <li><code>AI_REVIEW_MODEL</code> (exact model name)</li>
+        <li><code>AI_REVIEW_API_URL</code> (provider endpoint URL)</li>
+        <li><code>GITLAB_TOKEN</code> (with <code>api</code> scope for MR comments)</li>
+      </ul>
+      <p class="warn">If any required AI variable is missing, the pipeline fails fast with a clear message.</p>
+      <p class="ok">Template defaults already include <code>AI_REVIEW_SERVICE</code>, <code>AI_REVIEW_MODEL</code>, and <code>AI_REVIEW_API_URL</code>. Update in YAML or override in CI/CD variables.</p>
     </section>
 
     <section class="section">
