@@ -325,6 +325,7 @@ cliq-notify:
       <p class="ok">Only these three values must be added in the consuming project under <strong>Settings &gt; CI/CD &gt; Variables</strong>:</p>
       <p><strong>Mandatory variables:</strong> <code>AI_REVIEW_TOKEN</code>, <code>ENDPOINT</code>, and <code>GITLAB_TOKEN</code>.</p>
       <p class="warn">Set all three as <strong>masked</strong> and <strong>leave them unprotected</strong>. If they are marked as protected, the job will only work on protected branches and merge requests, which does not match this setup.</p>
+      <p>To create <code>GITLAB_TOKEN</code>, go to the project, then <strong>Settings &gt; Access Tokens</strong>. Click <strong>New token</strong>, give it a name, set an expiration date, choose the <code>api</code> scope, and create it. Copy the token immediately because GitLab shows it only once. Then add it as a masked CI/CD variable named <code>GITLAB_TOKEN</code>.</p>
       <p>All other settings such as notification mode, bot name, and AI provider values are already defined in the shared template YAML and do not need to be added here unless you want to override them.</p>
 
       <div class="table-wrap">
@@ -366,7 +367,34 @@ cliq-notify:
     </section>
 
     <section class="section">
-      <h2>5) Optional: Enable AI MR Review</h2>
+      <div class="eyebrow">Notification Modes</div>
+      <h2>5) User Mode vs Bot Mode</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Mode</th>
+            <th>What you set</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>User mode</strong></td>
+            <td><code>CLIQ_NOTIFICATION_MODE=user</code></td>
+            <td>Uses the existing <code>ENDPOINT</code> as-is. No bot unique name is required.</td>
+          </tr>
+          <tr>
+            <td><strong>Bot mode</strong></td>
+            <td><code>CLIQ_NOTIFICATION_MODE=bot</code><br><code>CLIQ_BOT_UNIQUE_NAME=&lt;bot-name&gt;</code></td>
+            <td>The template appends <code>bot_unique_name</code> automatically when the URL is built.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="ok">The shared template sets the default to <code>user</code>. If you switch to bot mode, also set <code>CLIQ_BOT_UNIQUE_NAME</code> in your GitLab CI/CD variables or override it in the YAML.</p>
+    </section>
+
+    <section class="section">
+      <h2>6) Optional: Enable AI MR Review</h2>
       <p>If you want automated merge request review comments, set:</p>
       <ul>
         <li><code>AI_REVIEW_ENABLED=true</code></li>
@@ -381,7 +409,7 @@ cliq-notify:
     </section>
 
     <section class="section">
-      <h2>6) Validation Checklist</h2>
+      <h2>7) Validation Checklist</h2>
       <ul>
         <li>Pipeline runs without variable errors</li>
         <li>Cliq message appears in target channel</li>
